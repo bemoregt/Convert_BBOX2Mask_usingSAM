@@ -1,77 +1,77 @@
 # Convert_BBOX2Mask_usingSAM
 
-바운딩 박스(Bounding Box) 정보를 이용하여 [SAM(Segment Anything Model)](https://github.com/facebookresearch/segment-anything)을 활용한 세그멘테이션 마스크로 변환하는 도구입니다.
+A tool that converts bounding box information to segmentation masks using [SAM (Segment Anything Model)](https://github.com/facebookresearch/segment-anything).
 
-## 실행 예시
+## Example Results
 
-![SAM 마스크 변환 과정](ScrShot%2047.png)
-![바운딩 박스 기반 세그멘테이션](ScrShot%2048.png)
-![차량 이미지 세그멘테이션 결과 1](ScrShot%2049.png)
-![차량 이미지 세그멘테이션 결과 2](ScrShot%2050.png)
+![SAM Mask Conversion Process](ScrShot%2047.png)
+![Bounding Box Based Segmentation](ScrShot%2048.png)
+![Vehicle Image Segmentation Result 1](ScrShot%2049.png)
+![Vehicle Image Segmentation Result 2](ScrShot%2050.png)
 
-## 주요 기능
+## Key Features
 
-- CSV 파일에서 바운딩 박스 정보를 읽어와 이미지별 세그멘테이션 마스크 생성
-- Apple Silicon(M1/M2) GPU 가속(MPS) 및 NVIDIA GPU(CUDA) 지원
-- 메모리 최적화를 위한 배치 처리 및 단일 마스크 출력 옵션
-- 진행 상태 및 예상 소요 시간 표시
+- Generate segmentation masks for images using bounding box information from CSV files
+- Support for Apple Silicon (M1/M2) GPU acceleration (MPS) and NVIDIA GPU (CUDA)
+- Batch processing and single mask output options for memory optimization
+- Progress status and estimated time remaining display
 
-## 동작 방식
+## How It Works
 
-1. CSV 파일에서 이미지별 바운딩 박스 정보 로드
-2. 각 바운딩 박스에 대해:
-   - 중앙점을 양성(positive) 프롬프트로 사용
-   - 모서리 4개 지점을 음성(negative) 프롬프트로 사용
-   - SAM 모델로 세그멘테이션 마스크 예측
-3. 이미지 내 모든 객체의 마스크를 하나로 결합
-4. 결과 마스크를 PNG 파일로 저장
+1. Load bounding box information for each image from a CSV file
+2. For each bounding box:
+   - Use the center point as a positive prompt
+   - Use the four corner points as negative prompts
+   - Predict segmentation masks using the SAM model
+3. Combine all object masks in an image into one
+4. Save the resulting mask as a PNG file
 
-## 요구사항
+## Requirements
 
-- Python 3.8 이상
-- PyTorch 2.0 이상
+- Python 3.8 or higher
+- PyTorch 2.0 or higher
 - OpenCV
 - NumPy
-- [segment-anything](https://github.com/facebookresearch/segment-anything) 패키지
-- SAM 모델 체크포인트 파일 (`sam_vit_b_01ec64.pth`)
+- [segment-anything](https://github.com/facebookresearch/segment-anything) package
+- SAM model checkpoint file (`sam_vit_b_01ec64.pth`)
 
-## 설치 방법
+## Installation
 
 ```bash
-# 1. 저장소 복제
+# 1. Clone the repository
 git clone https://github.com/bemoregt/Convert_BBOX2Mask_usingSAM.git
 cd Convert_BBOX2Mask_usingSAM
 
-# 2. 필요한 패키지 설치
+# 2. Install required packages
 pip install torch opencv-python numpy
 pip install git+https://github.com/facebookresearch/segment-anything.git
 
-# 3. SAM 모델 다운로드
-# https://github.com/facebookresearch/segment-anything#model-checkpoints 에서 
-# 'ViT-B SAM model' 다운로드
+# 3. Download SAM model
+# Download 'ViT-B SAM model' from
+# https://github.com/facebookresearch/segment-anything#model-checkpoints
 ```
 
-## 사용 방법
+## Usage
 
-1. `bbox_to_mask.py` 파일을 열어 아래 경로를 자신의 환경에 맞게 수정:
+1. Open the `bbox_to_mask.py` file and modify the following paths to match your environment:
    ```python
-   base_dir = "/path/to/your/data"  # 데이터 디렉토리
-   csv_path = os.path.join(base_dir, "your_bounding_boxes.csv")  # 바운딩 박스 CSV 파일
-   image_dir = os.path.join(base_dir, "images")  # 이미지 디렉토리
-   output_dir = os.path.join(base_dir, "segment")  # 결과 저장 디렉토리
+   base_dir = "/path/to/your/data"  # Data directory
+   csv_path = os.path.join(base_dir, "your_bounding_boxes.csv")  # Bounding box CSV file
+   image_dir = os.path.join(base_dir, "images")  # Image directory
+   output_dir = os.path.join(base_dir, "segment")  # Output directory
    
-   # SAM 모델 파일 경로
+   # SAM model file path
    sam_checkpoint = "path/to/sam_vit_b_01ec64.pth"
    ```
 
-2. 스크립트 실행:
+2. Run the script:
    ```bash
    python bbox_to_mask.py
    ```
 
-## CSV 파일 형식
+## CSV File Format
 
-CSV 파일은 다음과 같은 형식이어야 합니다:
+The CSV file should have the following format:
 ```
 filename,xmin,ymin,xmax,ymax
 image1.jpg,100,150,300,400
@@ -79,16 +79,16 @@ image2.jpg,200,250,500,600
 ...
 ```
 
-## 성능 최적화
+## Performance Optimization
 
-- `batch_size` 변수를 조정하여 메모리 사용량과 처리 속도를 조절할 수 있습니다.
-- 메모리가 충분하다면 `batch_size`를 증가시켜 처리 속도를 향상시킬 수 있습니다.
-- Apple Silicon GPU(MPS) 또는 NVIDIA GPU(CUDA)를 자동으로 감지하여 활용합니다.
+- Adjust the `batch_size` variable to control memory usage and processing speed
+- Increase `batch_size` if you have sufficient memory to improve processing speed
+- Automatically detects and utilizes Apple Silicon GPU (MPS) or NVIDIA GPU (CUDA)
 
-## 라이센스
+## License
 
 MIT License
 
-## 저자
+## Author
 
 [bemoregt](https://github.com/bemoregt)
