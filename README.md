@@ -2,6 +2,13 @@
 
 바운딩 박스(Bounding Box) 정보를 이용하여 [SAM(Segment Anything Model)](https://github.com/facebookresearch/segment-anything)을 활용한 세그멘테이션 마스크로 변환하는 도구입니다.
 
+## 실행 예시
+
+![SAM 마스크 변환 과정](ScrShot%2047.png)
+![바운딩 박스 기반 세그멘테이션](ScrShot%2048.png)
+![차량 이미지 세그멘테이션 결과 1](ScrShot%2049.png)
+![차량 이미지 세그멘테이션 결과 2](ScrShot%2050.png)
+
 ## 주요 기능
 
 - CSV 파일에서 바운딩 박스 정보를 읽어와 이미지별 세그멘테이션 마스크 생성
